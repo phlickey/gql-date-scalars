@@ -1,0 +1,25 @@
+schema:
+  - ./schema.gql
+generates:
+  ./src/defs.ts:
+    plugins:
+      - typescript
+      - typescript-resolvers
+      - add: "export type DeepPartial<T> = {\n [P in keyof T]?: T[P] extends Array<infer U>\n ? Array<DeepPartial<U>>\n : T[P] extends ReadonlyArray<infer U>\n ? ReadonlyArray<DeepPartial<U>>\n : DeepPartial<T[P]>\n };\n"
+    config:
+      maybeValue: T | undefined
+      defaultMapper: DeepPartial<{T}>
+      noSchemaStitching: true
+      customResolverFn: |
+        (
+          parent: TParent & { args?: { [key: string]: unknown } },
+          args: TArgs,
+          context: TContext,
+          info: GraphQLResolveInfo
+        ) => Promise<TResult & {args?: TArgs}> | TResult & {args?: TArgs}
+      scalars:
+        Time: Date
+        Date: Date
+        DateTime: Date
+      namingConvention:
+        enumValues: upper-case#upperCase

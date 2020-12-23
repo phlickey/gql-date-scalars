@@ -1,0 +1,15 @@
+scalar Date
+scalar Time
+scalar DateTime
+
+type Query {
+  info: String
+}
+
+extend type Query {
+  christmasDay: Date!
+  lunchTime: Time!
+  now: DateTime!
+  aWeekAgo(input: Date!): Date!
+  sixMinutesForward(input: Time!): Time!
+}
